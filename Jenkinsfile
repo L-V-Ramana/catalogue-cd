@@ -21,7 +21,7 @@ pipeline{
             
                 sh"""
                     aws eks update--kubeconfig --region $region --name "$project-${params.deplo_to}"
-                    kubectl 
+                    kubectl get pods
                     
                 """
             }
