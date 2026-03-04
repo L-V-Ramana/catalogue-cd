@@ -17,13 +17,15 @@ pipeline{
     stages{
         stage('deploy'){
             steps{
-                withAWS(credentials: 'aws-auth',region: 'us-east-1')
-            
-                sh"""
-                    aws eks update--kubeconfig --region $region --name "$project-${params.deplo_to}"
+                withAWS(credentials: 'aws-auth',region: 'us-east-1'){
+                        sh"""
+                    aws eks update-kubeconfig --region $region --name "$project-${params.deploy_to}"
                     kubectl get pods
                     
                 """
+                }
+            
+                
             }
         }
     }
