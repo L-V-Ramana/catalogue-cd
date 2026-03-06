@@ -21,7 +21,7 @@ pipeline{
                         sh"""
                     aws eks update-kubeconfig --region $region --name "$project-${params.deploy_to}"
                     kubectl get pods
-                    sed -i "e/image_version/${appVersion}/g" values.yaml
+                    sed -i "e/image_version/${env.appVersion}/g" values.yaml
                     helm upgrade --install catalogue -f values.yaml .
                     
                 """
