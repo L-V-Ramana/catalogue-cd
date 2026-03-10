@@ -5,6 +5,7 @@ pipeline{
     environment{
         appVersion=''
         project='roboshop'
+        component = 'catalogue'
         region='us-east-1'
 
     }
@@ -27,9 +28,65 @@ pipeline{
                     
                 """
                 }
-            
-                
+                         
             }
+        }
+
+        stage('roll back'){
+            steps{
+                script{
+                     def rolloutStatus = sh(
+                            script: "kubectl rollout status deployment/catalogue --namespace=roboshop ---timeout=30s 
+                            -n roboshop|| echo failed",
+                            returnStdout: true
+                        ).trim()
+                }
+
+                if(rolloutStatus.contains("successfully rolled out")){
+                        echo "deployment is successful"
+                }
+                else{
+                    sh """
+                        helm rollback $component -n $project
+                    """
+                    def rollbackstatus = sh( script: "kubectl rollout status deployment/catalogue --timeout=30s
+                     -namespace=roboshop||echo failed",
+                    returnstdout:true).trim()
+
+                    if(rollbackstatus.contains("successfully rolled out")){
+                        ERROR "deployment failed, rolleback success"
+                    }
+                    else{
+                        ERROR "deployment failed, rollback failed, application down"
+                    }
+                }
+            }
+        }
+
+        stage(){
+            steps{
+                script{
+                    sh """
+                        
+                    """
+                }    
+               
+            }
+        }
+    }
+
+    post{
+        always{
+            deleteDir()
+
+        }
+
+        success{
+            echo "pipeline is successful"
+        }
+
+        failed{
+            echo "pipeline is failed"
         }
     }
 }
