@@ -38,7 +38,7 @@ pipeline{
                     withAWS(credentials:'aws-auth', region: 'us-east-1'){
 
                          def rolloutStatus = sh(
-                            script: """kubectl rollout status deployment/catalogue --timeout=30s -n roboshop || echo failed""",
+                            script: """kubectl rollout status deployment/catalogue --timeout=1m -n roboshop || echo failed""",
                             returnStdout: true
                         ).trim()
 
