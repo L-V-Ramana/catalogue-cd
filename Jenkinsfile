@@ -36,7 +36,7 @@ pipeline{
             steps{
                 script{
                      def rolloutStatus = sh(
-                            script: "kubectl rollout status deployment/catalogue --namespace=roboshop ---timeout=30s 
+                            script: "kubectl rollout status deployment/catalogue --namespace=roboshop --timeout=30s 
                             -n roboshop|| echo failed",
                             returnStdout: true
                         ).trim()
