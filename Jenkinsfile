@@ -24,7 +24,7 @@ pipeline{
                     kubectl get pods
                     kubectl apply -f 00-namespace.yaml
                     sed -i "e/image_version/${env.appVersion}/g" values.yaml
-                    helm upgrade --install catalogue -f values.yaml .
+                    helm upgrade --install catalogue -f values.yaml -n roboshop .
                     
                 """
                 }
