@@ -35,30 +35,33 @@ pipeline{
         stage('roll back'){
             steps{
                 script{
-                    withAWS(credentials:'aws-auth', region: 'us-east-1')
-                     def rolloutStatus = sh(
+                    withAWS(credentials:'aws-auth', region: 'us-east-1'){
+
+                         def rolloutStatus = sh(
                             script: """kubectl rollout status deployment/catalogue --timeout=30s -n roboshop || echo failed""",
                             returnStdout: true
                         ).trim()
 
                          if(rolloutStatus.contains("successfully rolled out")){
-                        echo "deployment is successful"
-                }
-                else{
-                    sh """
-                        helm rollback $component -n $project
-                    """
-                    def rollbackstatus = sh( script: """ kubectl rollout status deployment/catalogue --timeout=30s
-                     -n roboshop||echo failed """,
-                    returnstdout:true).trim()
+                            echo "deployment is successful"
+                            }
+                        else{
+                            sh """
+                                helm rollback $component -n $project
+                            """
+                            def rollbackstatus = sh( script: """ kubectl rollout status deployment/catalogue --timeout=30s
+                            -n roboshop||echo failed """,
+                            returnstdout:true).trim()
 
-                    if(rollbackstatus.contains("successfully rolled out")){
-                        error "deployment failed, rolleback success"
+                            if(rollbackstatus.contains("successfully rolled out")){
+                                error "deployment failed, rolleback success"
+                            }
+                            else{
+                                error "deployment failed, rollback failed, application down"
+                            }
+                         }
+                    
                     }
-                    else{
-                        error "deployment failed, rollback failed, application down"
-                    }
-                }
                 }
 
                
