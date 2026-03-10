@@ -3,7 +3,6 @@ pipeline{
     agent{ label 'agent-1'}
 
     environment{
-        appVersion=''
         project='roboshop'
         component = 'catalogue'
         region='us-east-1'
@@ -23,7 +22,7 @@ pipeline{
                     aws eks update-kubeconfig --region $region --name "$project-${params.deploy_to}"
                     kubectl get pods
                     kubectl apply -f 00-namespace.yaml
-                    sed -i "e/image_version/${env.appVersion}/g" values.yaml
+                    sed -i "s/image_version/${params.appVersion}/g" values.yaml
                     helm upgrade --install catalogue -f values.yaml -n roboshop .
                     
                 """
