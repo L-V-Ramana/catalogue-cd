@@ -39,9 +39,8 @@ pipeline{
                             script: """kubectl rollout status deployment/catalogue --timeout=30s -n roboshop || echo failed""",
                             returnStdout: true
                         ).trim()
-                }
 
-                if(rolloutStatus.contains("successfully rolled out")){
+                         if(rolloutStatus.contains("successfully rolled out")){
                         echo "deployment is successful"
                 }
                 else{
@@ -59,6 +58,9 @@ pipeline{
                         error "deployment failed, rollback failed, application down"
                     }
                 }
+                }
+
+               
             }
         }
 
