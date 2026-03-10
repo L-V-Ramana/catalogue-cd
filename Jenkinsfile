@@ -53,10 +53,10 @@ pipeline{
                     returnstdout:true).trim()
 
                     if(rollbackstatus.contains("successfully rolled out")){
-                        ERROR "deployment failed, rolleback success"
+                        error "deployment failed, rolleback success"
                     }
                     else{
-                        ERROR "deployment failed, rollback failed, application down"
+                        error "deployment failed, rollback failed, application down"
                     }
                 }
             }
