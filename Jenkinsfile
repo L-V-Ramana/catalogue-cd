@@ -63,17 +63,6 @@ pipeline{
                
             }
         }
-
-        stage(){
-            steps{
-                script{
-                    sh """
-                        
-                    """
-                }    
-               
-            }
-        }
     }
 
     post{
@@ -86,7 +75,7 @@ pipeline{
             echo "pipeline is successful"
         }
 
-        failed{
+        failure{
             echo "pipeline is failed"
         }
     }
