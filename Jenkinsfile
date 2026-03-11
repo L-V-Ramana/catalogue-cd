@@ -20,13 +20,12 @@ pipeline{
                 script{
                         withAWS(credentials: 'aws-auth',region: 'us-east-1'){
                             sh"""
-                        aws eks update-kubeconfig --region $region --name "$project-${params.deploy_to}"
-                        kubectl get pods
-                        kubectl apply -f 00-namespace.yaml
-                        echo "${params.appVersion}"
-                        sed -i "s/image_version/${params.appVersion}/g" values.yaml
-                        # sed -i "s/image_version/${params.appVersion}/g" values.yaml
-                        helm upgrade --install catalogue -f values.yaml -n roboshop .
+                                aws eks update-kubeconfig --region ${region} --name "$project-${params.deploy_to}"
+                                kubectl get pods -n roboshop
+                                kubectl apply -f 00-namespace.yaml
+                                echo "${params.appVersion}"
+                                sed -i "s/image_version/${params.appVersion}/g" values.yaml
+                                helm upgrade --install catalogue -f values.yaml -n roboshop .
                         
                             """
                         }
