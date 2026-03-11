@@ -23,7 +23,7 @@ pipeline{
                         aws eks update-kubeconfig --region $region --name "$project-${params.deploy_to}"
                         kubectl get pods
                         kubectl apply -f 00-namespace.yaml
-                        sh "echo ${params.appVersion}"
+                        echo "${params.appVersion}"
                         sed -i "s/image_version/${params.appVersion}/g" values.yaml
                         // sed -i "s/image_version/${params.appVersion}/g" values.yaml
                         helm upgrade --install catalogue -f values.yaml -n roboshop .
