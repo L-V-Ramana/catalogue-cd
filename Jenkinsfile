@@ -53,7 +53,7 @@ pipeline{
                             """
                             def rollbackstatus = sh( script: """ kubectl rollout status deployment/catalogue --timeout=30s
                             -n roboshop||echo failed """,
-                            returnstdout:true).trim()
+                            returnStdout:true).trim()
 
                             if(rollbackstatus.contains("successfully rolled out")){
                                 error "deployment failed, rolleback success"
