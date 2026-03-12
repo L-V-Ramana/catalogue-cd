@@ -53,7 +53,7 @@ pipeline{
                                 helm rollback $component -n $project
                             """
                             def rollbackstatus = sh( 
-                                script: """ kubectl rollout status deployment/catalogue --timeout=30s-n roboshop||echo failed """,
+                                script: """ kubectl rollout status deployment/catalogue --timeout=30s -n roboshop||echo failed """,
                             returnStdout:true).trim()
 
                             if(rollbackstatus.contains("successfully rolled out")){
