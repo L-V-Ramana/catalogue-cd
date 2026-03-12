@@ -49,6 +49,7 @@ pipeline{
                             }
                         else{
                             sh """
+                            echo "roll back started"
                                 helm rollback $component -n $project
                             """
                             def rollbackstatus = sh( script: """ kubectl rollout status deployment/catalogue --timeout=30s
